@@ -13,6 +13,7 @@ data = data['Points']
 # Goal : Best ARIMA Order (p, d, q): (1, 1, 0)
 # Win : Best ARIMA Order (p, d, q): (1, 1, 0)
 
+#Points
 order = (0, 1, 5)
 model = ARIMA(data, order=order)
 model_fit = model.fit()

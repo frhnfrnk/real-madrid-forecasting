@@ -10,7 +10,7 @@ warnings.filterwarnings("ignore")
 data = pd.read_csv('data/Real-Madrid-Statistic.csv', delimiter=";")
 data['Year'] = pd.to_datetime(data['Year'], format='%Y')
 data.set_index('Year', inplace=True)
-data = data['Win']  # Change to 'Goal' or 'Win'
+data = data['Goal']  # Change to 'Goal' or 'Win'
 
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
 plot_acf(data, ax=ax1, lags=20)

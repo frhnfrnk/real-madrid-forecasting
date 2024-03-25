@@ -1,32 +1,30 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
 
 data = pd.read_csv('data/Real-Madrid-Statistic.csv', delimiter=";")
-
-data.set_index('Year', inplace=True)
 
 X = data['Win'].values.reshape(-1, 1)
 y = data['Points'].values
 
-X_with_intercept = np.c_[np.ones(X.shape[0]), X]
+model = LinearRegression()
+model.fit(X, y)
 
-coefficients = np.linalg.inv(X_with_intercept.T.dot(X_with_intercept)).dot(X_with_intercept.T).dot(y)
-
-# Using mean of Win for 2023
-forecasted_Win_2023 = data['Win'].mean()
-forecasted_price_2023 = coefficients[0] + coefficients[1] * forecasted_Win_2023
-
-print(f"The forecasted Win for the year 2023 is: {forecasted_Win_2023:.2f}")
-print(f"The forecasted nickel price for the year 2023 is: ${forecasted_price_2023:.2f}")
+predict_value = np.array([[29]])
+predicted_points = model.predict(predict_value)
+print("Prediksi jumlah poin untuk tahun 2024:", predicted_points[0])
 
 plt.figure(figsize=(10, 6))
-plt.scatter(X, y, color='blue', label='Original Data')
-plt.plot(X, X_with_intercept.dot(coefficients), color='red', label='Regression Line')
-plt.scatter(forecasted_Win_2023, forecasted_price_2023, color='green', label='Forecast for 2023')
-plt.title('Nickel Prices and Linear Regression Forecasting')
+plt.scatter(X, y, color='blue', label='Actual Data')
+plt.plot(X, model.predict(X), color='red', label='Linear Regression Model')
+plt.plot(predict_value, predicted_points, marker='o', markersize=8, color='green', label='Predicted Value: ' + str(round(predicted_points[0])))
+plt.title('Linear Regression - Real Madrid Points Prediction')
 plt.xlabel('Win')
-plt.ylabel('Price (USD)')
+plt.ylabel('Points')
 plt.legend()
 plt.grid(True)
+
+plt.text(predict_value[0], predicted_points[0], str(round(predicted_points[0])), fontsize=12, ha='right')
+
 plt.show()
